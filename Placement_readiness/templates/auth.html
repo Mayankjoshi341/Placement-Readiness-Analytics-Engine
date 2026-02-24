@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Placement Readiness</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR (reuse same navbar style) -->
+<header class="navbar">
+    <div class="nav-left">
+        <div class="logo-icon">🎓</div>
+        <span class="logo-text">Placement Readiness</span>
+    </div>
+    <nav class="nav-right">
+        <a href="/">Home</a>
+        <a href="#">Results</a>
+        <a href="\dashboard.html">Login</a>
+    </nav>
+</header>
+
+<!-- AUTH PAGE -->
+<section class="auth-container">
+
+    <!-- LEFT SIDE (STATIC) -->
+    <div class="auth-left">
+        <h1>Welcome Back</h1>
+        <p>Sign in to access your personalized placement readiness dashboard</p>
+
+        <img
+            src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04"
+            alt="Login illustration"
+        >
+    </div>
+
+    <!-- RIGHT SIDE (DYNAMIC) -->
+    <div class="auth-right">
+        <!-- SIGN IN -->
+    <div id="signin-box" class="auth-box">
+        <h2>Sign In</h2>
+        <p class="auth-subtitle">Enter your credentials to continue</p>
+
+        <form id="loginForm">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email" required>
+
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+
+            <div class="auth-row">
+                <label class="remember">
+                    <input type="checkbox"> Remember me
+                </label>
+                <a href="#" class="link">Forgot password?</a>
+            </div>
+
+        <!-- STATUS MESSAGE -->
+        <div id="loginStatus" class="status-label hidden"></div>
+
+            <button type="submit" class="primary-btn full-width">
+            Sign In
+            </button>
+        </form>
+
+        <p class="switch-text">
+            Don't have an account?
+            <span onclick="showSignup()">Sign Up</span>
+        </p>
+    </div>
+    </div>
+</section>
+
+<!-- TOGGLE SCRIPT -->
+
+<script>
+document.getElementById("loginForm").onsubmit = function () {
+    const msg = document.getElementById("loginMsg");
+    msg.className = "status success";
+    msg.innerText = "Login successful. Redirecting...";
+    msg.classList.remove("hidden");
+
+    setTimeout(() => {
+        window.location.href = "dashboard.html";
+    }, 1500);
+
+    return false; // stop real submit
+};
+</script>
+
+</body>
+</html>

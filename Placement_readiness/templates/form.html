@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Placement Readiness Engine</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+<header class="navbar">
+    <div class="nav-left">
+        <div class="logo-icon">🎓</div>
+        <span class="logo-text">Placement Readiness</span>
+    </div>
+    <nav class="nav-right">
+        <a href="/index.html">Home</a>
+        <a href="/results" class="active-link">Results</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+<h1>🎓 Placement Readiness Check</h1>
+
+<form method="POST" action="/generate-report">
+
+<!-- BASIC INFO -->
+<label>Full Name</label>
+<input type="text" name="name" required>
+
+<label>Email Address</label>
+<input type="email" name="email" required>
+
+<label>CGPA</label>
+<input type="number" name="cgpa" step="0.1" min="5" max="10" required>
+
+<!-- CONTEXT -->
+<h3>🎓 Educational Background</h3>
+
+<label>Degree</label>
+<select name="degree" required>
+  <option value="">Select Degree</option>
+  <option>BTech CS</option>
+  <option>BTech IT</option>
+  <option>BSc CS</option>
+  <option>BCom</option>
+  <option>BA</option>
+  <option>MBA</option>
+</select>
+
+<label>Year of Graduation</label>
+<input type="number" name="graduation_year" min="2000" max="2030" required>
+
+<label>College Tier</label>
+<select name="college_tier" required>
+  <option value="">Select Tier</option>
+  <option value="1">Tier 1</option>
+  <option value="2">Tier 2</option>
+  <option value="3">Tier 3</option>
+</select>
+
+<!-- DOMAIN -->
+<h3>🎯 Target Job Domain</h3>
+
+<select id="domain" name="domain" required onchange="loadSkills()">
+  <option value="">Select Domain</option>
+  <option value="Software Engineer (Backend)">Software Engineer (Backend)</option>
+  <option value="Data Scientist">Data Scientist</option>
+  <option value="Frontend Developer">Frontend Developer</option>
+</select>
+
+<h3>🛠 Domain Skills</h3>
+<div id="skills-section"></div>
+
+<!-- ENGLISH -->
+<h3>🗣 English Communication</h3>
+<textarea name="english_response" rows="6"
+placeholder="Briefly describe one project, internship, or task you worked on (5–8 sentences)."
+required></textarea>
+
+<!-- APTITUDE -->
+<h3>🧠 Aptitude & Reasoning</h3>
+<div id="aptitude-section"></div>
+
+<label>Applied Work Count (Projects / Case Studies)</label>
+<input type="number" name="applied_work" min="0" max="10" required>
+
+<label>Internship Count</label>
+<input type="number" name="internships" min="0" max="5" required>
+
+<button type="submit">Generate My Report 📊</button>
+</form>
+
+<div class="note">
+You'll receive a detailed report on your email after submission.
+</div>
+</div>
+
+<script>
+const DOMAIN_SKILLS = {
+  "Data Scientist": ["Python","Statistics","Machine Learning","SQL","Communication"],
+  "Software Engineer (Backend)": [
+    "Programming Fundamentals","Data Structures & Algorithms",
+    "Databases / SQL","Backend Frameworks","Communication"
+  ],
+  "Frontend Developer": [
+    "HTML/CSS","JavaScript","Frontend Frameworks","UI/UX Understanding","Communication"
+  ]
+};
+
+function loadSkills() {
+  const domain = document.getElementById("domain").value;
+  const container = document.getElementById("skills-section");
+  container.innerHTML = "";
+  if (!domain) return;
+
+  DOMAIN_SKILLS[domain].forEach(skill => {
+    container.innerHTML += `
+      <label>${skill}</label>
+      <select name="skill_${skill}" required>
+        <option value="">Rate</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>`;
+  });
+}
+
+const APTITUDE_QUESTIONS = [
+  "Can you solve arithmetic under time pressure?",
+  "Are you comfortable identifying patterns?",
+  "Can you interpret graphs accurately?",
+  "Can you break problems into steps?",
+  "Can you maintain accuracy while solving fast?",
+  "Are you confident with percentages?",
+  "Can you solve logical puzzles?"
+];
+
+function loadAptitude() {
+  const container = document.getElementById("aptitude-section");
+  container.innerHTML = "";
+  APTITUDE_QUESTIONS.sort(() => 0.5 - Math.random()).slice(0,5)
+    .forEach((q,i) => {
+      container.innerHTML += `
+        <p>${i+1}. ${q}</p>
+        <select name="apt_${i}" required>
+          <option value="">Select</option>
+          <option value="1">No</option>
+          <option value="2">Yes</option>
+        </select>`;
+    });
+}
+
+window.onload = loadAptitude;
+</script>
+
+</body>
+</html>
