@@ -1,7 +1,7 @@
-from .input_based import aptitude_insight , english_insight , domain_skill_insight
-from .math_based import calculate_readiness_score , ai_proof_score
-from .rule_based import growth_trajectory , estimated_time , estimated_impact , salary_estimation , peer_benchmark
-from .insights import gap_analysis , categorize_gaps , focus_priorities , domain_switch_feasibility , placement_type
+from ..prediction_service.analysis.input_based import aptitude_insight , english_insight , domain_skill_insight
+from ..prediction_service.analysis.math_based import calculate_readiness_score , ai_proof_score
+from ..prediction_service.analysis.rule_based import growth_trajectory , estimated_time , estimated_impact , salary_estimation , peer_benchmark
+from ..prediction_service.analysis.insights import gap_analysis , categorize_gaps , focus_priorities , domain_switch_feasibility , placement_type
 import numpy as np
 import pandas as pd
 def generate_report(student_row , cluster_profile , feature_cols , DOMAIN_SKILL_SCHEMA , DEGREE_ROLE_MAP):
