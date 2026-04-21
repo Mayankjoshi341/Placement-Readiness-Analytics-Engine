@@ -19,3 +19,5 @@ def english_analysis(text):
             "issue": "Minor improvements needed",
             "suggestion": "Polish grammar and flow"
         }
+
+def english_score(text):

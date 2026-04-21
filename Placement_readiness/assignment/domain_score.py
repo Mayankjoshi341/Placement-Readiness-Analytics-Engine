@@ -1,37 +1,8 @@
-# domain_score.py
-
-DOMAIN_SKILL_SCHEMA = {
-    "Software Engineer (Backend)": {
-        "tier": "high",
-        "skills": {
-            "Programming Fundamentals": 0.25,
-            "Data Structures & Algorithms": 0.25,
-            "Databases / SQL": 0.15,
-            "Backend Frameworks": 0.20,
-            "Communication": 0.15
-        }
-    },
-
-    "Data Scientist": {
-        "tier": "high",
-        "skills": {
-            "Python": 0.25,
-            "Statistics": 0.20,
-            "Machine Learning": 0.25,
-            "SQL": 0.15,
-            "Communication": 0.15
-        }
-    }
-}
-
-
-# ---------- helpers ----------
 def _normalize_key(skill: str) -> str:
     return skill.lower().replace(" ", "_").replace("/", "_")
 
 
-# ---------- public API ----------
-def extract_user_ratings(domain: str, form_data: dict) -> dict:
+def extract_user_ratings(domain: str, form_data: dict ,DOMAIN_SKILL_SCHEMA ) -> dict:
     """
     Converts raw form input into {skill: rating}
     """
@@ -50,9 +21,9 @@ def extract_user_ratings(domain: str, form_data: dict) -> dict:
     return ratings
 
 
-def compute_domain_score(domain: str, user_ratings: dict) -> float:
+def compute_domain_score(domain: str, user_ratings: dict , DOMAIN_SKILL_SCHEMA) -> float:
     """
-    Returns normalized domain score (0–1)
+    Returns normalized domain score (0-1)
     """
     skills = DOMAIN_SKILL_SCHEMA[domain]["skills"]
     score = 0.0
@@ -64,7 +35,7 @@ def compute_domain_score(domain: str, user_ratings: dict) -> float:
     return round(score, 3)
 
 
-def compute_skill_gaps(domain: str,user_ratings: dict,threshold: float = 0.4) -> dict:
+def compute_skill_gaps(domain: str,user_ratings: dict,threshold: float = 0.4 ,DOMAIN_SKILL_SCHEMA : dict) -> dict:
     """
     Returns missing skills sorted by severity
     """
