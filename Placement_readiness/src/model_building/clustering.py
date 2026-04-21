@@ -3,13 +3,10 @@ from sklearn.cluster import KMeans
 from kneed import KneeLocator
 import matplotlib.pyplot as plt
 
+from data_generator.data_perparation import data_preparation
+
 def optimal_kmeans_clusters(x_scaled, max_k=10):
-    inertias = [
-        KMeans(n_clusters=k, random_state=42, n_init=10)
-        .fit(x_scaled)
-        .inertia_
-        for k in range(1, max_k + 1)
-    ]
+    inertias = [KMeans(n_clusters=k, random_state=42, n_init=10).fit(x_scaled).inertia_ for k in range(1, max_k + 1)]
 
     kl = KneeLocator(
         x=range(1, max_k + 1),
@@ -29,3 +26,7 @@ def train_kmeans_model(x_scaled, n_clusters):
     clusters = model.fit_predict(x_scaled)
 
     return model , pd.Series(clusters, index=x_scaled.index, name='cluster')
+
+
+df = data_preparation(100)
+print(df)
