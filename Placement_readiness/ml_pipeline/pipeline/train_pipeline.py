@@ -1,8 +1,8 @@
 import pandas as pd
-from data_perparation import data_preparation
-from preprocessing import fit_scaler
-from clustering import train_kmeans_model, optimal_kmeans_clusters
-from profiling import profile_clusters, map_readliness_levels
+from Placement_readiness.ml_pipeline.data_generator.data_perparation import data_preparation
+from Placement_readiness.ml_pipeline.data_preprocessing.preprocessing import fit_scaler
+from Placement_readiness.ml_pipeline.model_building.clustering import train_kmeans_model, optimal_kmeans_clusters
+from Placement_readiness.ml_pipeline.profiling.profiling import profile_clusters, map_readliness_levels
 from joblib import dump
 from pathlib import Path
 

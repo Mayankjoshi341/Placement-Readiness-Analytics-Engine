@@ -307,20 +307,20 @@ def growth_trajectory(student_row: pd.Series):
 
     if level == "Not Ready":
         return [
-            "Skill Foundation Phase (0–8 months)",
+            "Skill Foundation Phase (0-8 months)",
             "Intern / Trainee Roles",
-            "Junior Role (1–2 years)",
+            "Junior Role (1-2 years)",
         ]
     elif level == "Almost Ready":
         return [
             "Junior / Graduate Trainee",
-            "Mid-level Role (1–2 years)",
+            "Mid-level Role (1-2 years)",
             "Specialist / Lead Track",
         ]
     else:
         return [
             "Direct Entry-Level Role",
-            "Strong Mid-level Role (1–2 years)",
+            "Strong Mid-level Role (1-2 years)",
             "Advanced / Specialized Track",
         ]
 
@@ -438,75 +438,7 @@ def generate_recommendation(
         "peer_benchmark": peer_benchmark(
             student_row, cluster_profile, feature_cols
         ),
-        "expected_salary_lpa": f"{salary_min} – {salary_max}",
+        "expected_salary_lpa": f"{salary_min}-{salary_max}",
         "growth_trajectory": growth_trajectory(student_row),
         "estimated_impact": estimated_impact(focus.keys()),
     }
-
-
-# ======================================================
-# TEST RUN (AUTO EXECUTES)
-# ======================================================
-
-if __name__ == "__main__":
-    FEATURE_COLS = [
-        "cgpa",
-        "aptitude_level",
-        "domain_skill_level",
-        "english_level",
-        "applied_work_count",
-        "internships_count",
-    ]
-
-    student_row = pd.Series(
-        {
-            "cgpa": 7.6,
-            "aptitude_level": 2,
-            "domain_skill_level": 3,
-            "english_level": 4,
-            "applied_work_count": 1,
-            "internships_count": 0,
-            "cluster": 1,
-            "readiness_level": "Almost Ready",
-        }
-    )
-
-    cluster_profile = pd.DataFrame(
-        {
-            "cgpa": [6.2, 7.4, 8.1],
-            "aptitude_level": [2.5, 3.2, 4.1],
-            "domain_skill_level": [2.8, 3.5, 4.3],
-            "english_level": [2.9, 3.6, 4.2],
-            "applied_work_count": [0.8, 2.5, 4.0],
-            "internships_count": [0.3, 1.2, 2.1],
-        },
-        index=[0, 1, 2],
-    )
-
-    student_vector = np.array([7.6, 2, 3, 4, 1, 0])
-    ready_centroid = np.array([8.1, 4.1, 4.3, 4.2, 4.0, 2.1])
-    max_distance = np.linalg.norm(
-        np.array([5.5, 1, 1, 1, 0, 0]) - ready_centroid
-    )
-
-    domain = "Software Engineer (Backend)"
-    english_text = (
-        "I am interested in backend development. "
-        "I have worked on small APIs using Flask. "
-        "I want to improve my communication and system design."
-    )
-
-    result = generate_recommendation(
-        student_row,
-        cluster_profile,
-        FEATURE_COLS,
-        student_vector,
-        ready_centroid,
-        max_distance,
-        domain,
-        english_text,
-    )
-
-    print("\n===== RECOMMENDATION OUTPUT =====\n")
-    for k, v in result.items():
-        print(f"{k}: {v}")

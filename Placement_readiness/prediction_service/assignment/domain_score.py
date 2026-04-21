@@ -58,8 +58,3 @@ form_data = {
     "skill_sql": "2",
     "skill_communication": "4"
 }
-
-scores = extract_user_ratings("Data Scientist" , form_data)
-
-print(compute_domain_score("Data Scientist" , scores))
-print(compute_skill_gaps("Data Scientist" , scores))

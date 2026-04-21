@@ -4,10 +4,11 @@ from joblib import load
 import os
 
 # Import your modules
-from src.preprocessing import transform_with_scaler
+from Placement_readiness.ml_pipeline.data_preprocessing.preprocessing import transform_with_scaler
+from Placement_readiness.prediction_service.analysis.analysis_report import generate_report
+from Placement_readiness.prediction_service.analysis.generate_report import generate_html_report
 from src.recommendation import generate_recommendation
-from src.generate_report import mail_generate
-from src.scores import compute_domain_skill_score , DOMAIN_SKILL_SCHEMA , user_rating
+from schema.schemas import DOMAIN_SKILL_SCHEMA , DEGREE_ROLE_MAP
 
 app = Flask(__name__ ,  template_folder="templates")
 
@@ -33,9 +34,9 @@ def home():
 
 from threading import Thread
 
-def send_email_async(email, name, recommendation):
+def send_email_async(email, name,report):
     try:
-        mail_generate(email, name, recommendation)
+        generate_html_report(email, name,report )
     except Exception as e:
         print("Email error:", e)
 
@@ -87,6 +88,9 @@ def generate_report():
         student_row=user_df.iloc[0],
         cluster_profile=cluster_profiles,
         feature_cols=FEATURE_COLS
+    report = generate_report(
+        student_vec= df.iloc[0]
+        
     )
     Thread(
         target=send_email_async,
