@@ -1,83 +1,79 @@
 from datetime import datetime
-import pdfkit
-import os
-from email.mime.application import MIMEApplication
 
-def generate_html_report(student_name, recommendation):
+def generate_html_report(student_name, report):
+
+    # Lists
     strengths_html = "".join(
-        f"<li>✅ {k.replace('_', ' ').title()}</li>"
-        for k in recommendation["strengths"]
+        f"<li>✅ {s.replace('_', ' ').title()}</li>"
+        for s in report["strengths"]
+    )
+
+    weaknesses_html = "".join(
+        f"<li>⚠️ {w.replace('_', ' ').title()}</li>"
+        for w in report["weaknesses"]
     )
 
     focus_html = "".join(
-        f"<li>🎯 {k.replace('_', ' ').title()}</li>"
-        for k in recommendation["focus_areas"]
+        f"<li>🎯 {f.replace('_', ' ').title()}</li>"
+        for f in report["focus_priorities"]
     )
 
     trajectory_html = "".join(
         f"<li>📈 {step}</li>"
-        for step in recommendation["growth_trajectory"]
+        for step in report["growth_trajectory"]
     )
 
     impact_html = "".join(
-        f"<li><b>{k.replace('_', ' ').title()}</b>: {v}</li>"
-        for k, v in recommendation["estimated_impact"].items()
+        f"<li><b>{k.replace('_',' ').title()}</b>: {v}</li>"
+        for k, v in report["estimated_impact"].items()
     )
 
     html = f"""
     <html>
     <head>
-        <title>Placement Readiness Report</title>
         <style>
             body {{
-                font-family: 'Segoe UI', Arial, sans-serif;
+                font-family: Arial, sans-serif;
                 background-color: #f4f6f8;
-                padding: 30px;
+                padding: 20px;
             }}
             .container {{
-                background: #ffffff;
                 max-width: 800px;
                 margin: auto;
-                padding: 30px;
-                border-radius: 12px;
-                box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+                background: #ffffff;
+                padding: 25px;
+                border-radius: 10px;
             }}
             h1 {{
-                color: #2c3e50;
                 text-align: center;
+                color: #2c3e50;
             }}
             h2 {{
                 color: #34495e;
-                border-bottom: 2px solid #ecf0f1;
+                border-bottom: 1px solid #eee;
                 padding-bottom: 5px;
+            }}
+            .box {{
+                margin-top: 20px;
+                padding: 15px;
+                background: #f9fafb;
+                border-radius: 8px;
             }}
             .badge {{
                 display: inline-block;
-                padding: 8px 15px;
+                padding: 8px 12px;
                 border-radius: 20px;
-                background-color: #3498db;
+                background: #3498db;
                 color: white;
                 font-weight: bold;
             }}
-            .box {{
-                background: #f9fafb;
-                padding: 20px;
-                margin-top: 20px;
-                border-radius: 10px;
-            }}
             ul {{
-                padding-left: 20px;
-            }}
-            footer {{
-                margin-top: 30px;
-                font-size: 12px;
-                color: #7f8c8d;
-                text-align: center;
+                padding-left: 18px;
             }}
         </style>
     </head>
-    <body>
 
+    <body>
         <div class="container">
             <h1>🎓 Placement Readiness Report</h1>
 
@@ -85,23 +81,37 @@ def generate_html_report(student_name, recommendation):
             <p><b>Date:</b> {datetime.now().strftime('%d %b %Y')}</p>
 
             <div class="box">
-                <h2>📊 Readiness Level</h2>
-                <span class="badge">{recommendation['readiness_level']}</span>
+                <h2>📊 Scores</h2>
+                <p><b>Readiness Score:</b> {round(report["readiness_score"], 2)}</p>
+                <p><b>AI-Proof Score:</b> {round(report["ai_proof_score"], 2)}</p>
+                <p><b>Estimated Time to Ready:</b> {report["estimated_time_to_ready"]}</p>
             </div>
 
             <div class="box">
-                <h2>💰 Expected Salary Range</h2>
-                <p><b>₹ {recommendation['expected_salary_lpa']} LPA</b></p>
+                <h2>🧠 Insights</h2>
+                <p><b>Aptitude:</b> {report["aptitude_insight"]}</p>
+                <p><b>English:</b> {report["english_insight"]}</p>
+                <p><b>Domain Skills:</b> {report["domain_skill_insight"]}</p>
             </div>
 
             <div class="box">
-                <h2>💪 Your Strengths</h2>
+                <h2>💪 Strengths</h2>
                 <ul>{strengths_html}</ul>
             </div>
 
             <div class="box">
-                <h2>🎯 Focus Areas (Next 8–12 Weeks)</h2>
+                <h2>⚠️ Weaknesses</h2>
+                <ul>{weaknesses_html}</ul>
+            </div>
+
+            <div class="box">
+                <h2>🎯 Focus Priorities</h2>
                 <ul>{focus_html}</ul>
+            </div>
+
+            <div class="box">
+                <h2>📈 Growth Trajectory</h2>
+                <ul>{trajectory_html}</ul>
             </div>
 
             <div class="box">
@@ -110,67 +120,18 @@ def generate_html_report(student_name, recommendation):
             </div>
 
             <div class="box">
-                <h2>📈 Career Growth Trajectory</h2>
-                <ul>{trajectory_html}</ul>
+                <h2>🎯 Career Insights</h2>
+                <p><b>Placement Type:</b> {report["placement_type"]}</p>
+                <p><b>Domain Switch Feasibility:</b> {report["domain_switch_feasibility"]}</p>
             </div>
 
-            <footer>
-                This report provides guidance based on peer comparison and does not guarantee placement or salary.
+            <footer style="margin-top:20px; font-size:12px; text-align:center; color:#888;">
+                This report is AI-generated based on skill analysis and peer comparison.
             </footer>
-        </div>
 
+        </div>
     </body>
     </html>
     """
 
     return html
-
-#def pdf_convert(html_content):
-    options = {
-        'page-size': 'A4',
-        'encoding': 'UTF-8',
-        'no-outline': None
-    }
-    config = pdfkit.configuration(
-        wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe")
-
-    pdf_bytes = pdfkit.from_string(html_content, options=options , configuration=config)
-    return pdf_bytes
-
-def mail_generate(receiver_gmail, student_name, recommendation):
-    import smtplib
-    from email.mime.text import MIMEText
-    from email.mime.multipart import MIMEMultipart
-
-    sender_gmail = os.getenv("SENDER_GMAIL")
-    password = os.getenv("GMAIL_APP_PASSWORD")
-
-    msg = MIMEMultipart("alternative")
-    msg["From"] = sender_gmail
-    msg["To"] = receiver_gmail
-    msg["Subject"] = "📊 Placement Readiness Report for " + student_name
-    body = generate_html_report(student_name, recommendation)
-    msg.attach(MIMEText(body, "html"))
-    
-    #pdf_report = pdf_convert(body)
-
-    #if pdf_report is not None:
-    #   attachment = MIMEApplication(pdf_report, _subtype="pdf")
-    #   attachment.add_header(
-    #        "Content-Disposition",
-    #       "attachment",
-    #       filename="Placement_Readiness_Report.pdf"
-    #   )
-    #   msg.attach(attachment)
-    server = None
-    try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(sender_gmail, password)
-        server.sendmail(sender_gmail, receiver_gmail, msg.as_string())
-        print(f"Email sent successfully to {receiver_gmail}")
-    except Exception as e:
-        print("Error:", e)
-    finally:
-        if server:
-            server.quit()

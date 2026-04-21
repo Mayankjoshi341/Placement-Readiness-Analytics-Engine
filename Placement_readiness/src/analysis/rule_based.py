@@ -25,6 +25,11 @@ def salary_estimation(student_row):
     if student_row["domain_skill_level"] >= 4:
         experience_factor += 0.5
     
+    base_max = base_max + college_factor + experience_factor
+    base_min = base_min + college_factor + experience_factor
+    return base_min , base_max
+
+    
 
 
 def growth_trajectory(student_row: pd.Series):
